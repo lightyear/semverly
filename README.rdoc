@@ -1,0 +1,60 @@
+= semverly
+
+semverly is a Ruby gem for parsing and comparing version strings that comply with the {Semantic Versioning 2.0.0}[http://semver.org/] specification.
+
+== Usage
+
+The +.parse+ class method parses a SemVer-compliant version string into its component parts.
+
+    require 'semverly'
+
+    irb> semver = SemVer.parse('1.2.3-alpha+gitsha.abc1123')
+    => #<SemVer:0x007f9e8b88f898 @major=1, @minor=2, @patch=3, @prerelease="alpha", @metadata="gitsha.abc1123">
+    irb> semver.major
+    => 1
+    irb> semver.minor
+    => 2
+    irb> semver.patch
+    => 3
+    irb> semver.prerelease
+    => "alpha"
+    irb> semver.metadata
+    => "gitsha.abc1123"
+
+A leading "v" prefix is optional.
+
+    irb> SemVer.parse('v1.0')
+    => #<SemVer:0x007f9e8b8c75b8 @major=1, @minor=0, @patch=0, @prerelease=nil, @metadata=nil>
+
+Strings that are not SemVer-compliant return +nil+.
+
+    irb> SemVer.parse('v1.0a')
+    => nil
+
+You can also build SemVer instances with +.new+.
+
+    irb> SemVer.new(1, 2, 3, 'beta.1', 'gitsha.abc123')
+    => #<SemVer:0x007f9e8b854e78 @major=1, @minor=2, @patch=3, @prerelease="beta.1", @metadata="gitsha.abc123">
+
++#to_s+ gives you back a String representation of the version.
+
+    irb> semver = SemVer.new(1, 2, 3, 'beta.1', 'gitsha.abc123')
+    => #<SemVer:0x007f9e8b8e0400 @major=1, @minor=2, @patch=3, @prerelease="beta.1", @metadata="gitsha.abc123">
+    irb> semver.to_s
+    => "1.2.3-beta.1+gitsha.abc123"
+
+Sorting works as expected.
+
+    irb> %w(1.0.0-alpha 1.0.0-alpha.1 1.0.0-alpha.beta 1.0.0-beta 1.0.0-beta.2 1.0.0-beta.11 1.0.0-rc.1 1.0.0).shuffle.map { |s| SemVer.parse(s) }.sort.map(&:to_s)
+    => ["1.0.0-alpha", "1.0.0-alpha.1", "1.0.0-alpha.beta", "1.0.0-beta", "1.0.0-beta.2", "1.0.0-beta.11", "1.0.0-rc.1", "1.0.0"]
+
+= Contributing
+
+1. Fork it.
+2. Create a topic branch for your feature or bug fix.
+3. Commit your changes, including new/updated tests.
+4. Create a pull request.
+
+= License
+
+Semverly is released under the {MIT license}[http://www.opensource.org/licenses/MIT].
