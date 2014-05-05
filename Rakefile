@@ -4,4 +4,4 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.rspec_opts = '-r semverly'
 end
 
-task default: :spec
+task :default => :spec
