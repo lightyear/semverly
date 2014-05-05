@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'semverly'
-  s.version     = '1.1.0'
+  s.version     = "1.1.#{ENV['BUILD_NUMBER'] || 'dev'}"
   s.summary     = 'Semantic Versioning parsing and comparison'
   s.description = 'Parses and compares version strings that comply with Semantic Versioning 2.0 (http://semver.org/)'
   s.authors     = ['Steve Madsen']
