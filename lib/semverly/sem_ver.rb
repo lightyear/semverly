@@ -36,23 +36,19 @@ class SemVer
   # @param string [String] the version identifier to parse
   # @return [SemVer] A +SemVer+ instance or +nil+ if the string is not SemVer compliant.
   def self.parse(string)
-    re = Regexp.new('\Av?(?<major>\d+)
-                         (\.(?<minor>\d+))?
-                         (\.(?<patch>\d+))?
-                         (-(?<prerelease>[0-9A-Za-z.-]+))?
-                         (\+(?<metadata>[0-9A-Za-z.-]+))?\z', Regexp::EXTENDED)
+    re = Regexp.new('^\Av?(\d+)(\.(\d+))?(\.(\d+))?(-([0-9A-Za-z.-]+))?(\+([0-9A-Za-z.-]+))?$')
     matches = re.match(string)
     return nil if matches.nil?
 
-    major = matches['major'].to_i
-    minor = matches['minor'].to_i
-    patch = matches['patch'].to_i
+    major = matches[1].to_i
+    minor = matches[3].to_i
+    patch = matches[5].to_i
 
-    if prerelease = matches['prerelease']
+    if prerelease = matches[7]
       return nil if prerelease.split('.').any? { |part| part.nil? || part == '' }
     end
 
-    if metadata = matches['metadata']
+    if metadata = matches[9]
       return nil if metadata.split('.').any? { |part| part.nil? || part == '' }
     end
 
